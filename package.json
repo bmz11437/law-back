@@ -1,0 +1,28 @@
+{
+  "name": "law-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon src"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compressing": "^1.5.0",
+    "docxtemplater": "^3.16.11",
+    "fstream": "^1.0.12",
+    "jzip": "^1.0.0",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-json-error": "^3.1.2",
+    "koa-parameter": "^3.0.1",
+    "koa-router": "^8.0.8",
+    "koa-static": "^5.0.0",
+    "open-docxtemplater-image-module": "^1.0.3",
+    "tar": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
