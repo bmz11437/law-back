@@ -2,6 +2,7 @@ const Koa = require("koa");
 const koaBody = require("koa-body");
 const path = require("path");
 const Router = require("koa-router");
+const cors=require('koa2-cors')
 const app = new Koa();
 let router = new Router();
 let {  getQszDocs } = require("./exportDoc");
@@ -20,6 +21,6 @@ app.use(
     }
   })
 );
-
+app.use(cors());
 app.use(router.routes());
 app.listen(3000, () => console.log("程序启动在 3000 端口了"));
