@@ -5,13 +5,18 @@ const Router = require("koa-router");
 const cors=require('koa2-cors')
 const app = new Koa();
 let router = new Router();
-let {  getQszDocs } = require("./exportDoc");
+let {  getQszDocs,getSsclDocs } = require("./exportDoc");
 router.post("/word", async ctx => {
   let postParam = ctx.request.body;
   await getQszDocs(postParam);
   ctx.body = "导出成功";
 });
 
+router.post("/word2", async ctx => {
+  let postParam = ctx.request.body;
+  await getSsclDocs(postParam);
+  ctx.body = "导出成功";
+});
 app.use(
   koaBody({
     multipart: true,

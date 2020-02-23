@@ -4,35 +4,37 @@ const path = require("path");
 const Docxtemplater = require("docxtemplater");
 const compressing = require("compressing");
 
-function buildWord(params, fileName, i) {
+function buildWord(params, fileName, i, docType) {
   let type = "";
-  if (i == 1) {
-    if (params.hjd == "" && params.wzfbf == 0) {
-      type += "1";
-    } else if (params.hjd == "" && params.wzfbf !== 0) {
-      type += "2";
-    } else if (params.hjd !== "" && params.wzfbf == 0) {
-      type += "3";
-    } else if (params.hjd !== "" && params.wzfbf !== 0) {
-      type += "4";
+  if (docType=='起诉状') {
+    if (i == 1) {
+      if (params.hjd == "" && params.wzfbf == 0) {
+        type += "1";
+      } else if (params.hjd == "" && params.wzfbf !== 0) {
+        type += "2";
+      } else if (params.hjd !== "" && params.wzfbf == 0) {
+        type += "3";
+      } else if (params.hjd !== "" && params.wzfbf !== 0) {
+        type += "4";
+      }
     }
-  }
-  if (i == 2) {
-    params.dlr2Name = "   ";
-    if (params.dlr2[1].name) {
-      params.dlr2Name = params.dlr2[1].name;
+    if (i == 2) {
+      params.dlr2Name = "   ";
+      if (params.dlr2[1].name) {
+        params.dlr2Name = params.dlr2[1].name;
+      }
     }
-  }
-  if (i == 3) {
-    if (params.hjd == "") {
-      type += "1";
-    } else {
-      type += "2";
+    if (i == 3) {
+      if (params.hjd == "") {
+        type += "1";
+      } else {
+        type += "2";
+      }
     }
   }
 
   var content = fs.readFileSync(
-    path.join(__dirname, `../template/起诉状/${fileName}${type}.docx`),
+    path.join(__dirname, `../template/${docType}/${fileName}${type}.docx`),
     "binary"
   );
   var zip = new JSZip(content);
@@ -53,7 +55,7 @@ function buildWord(params, fileName, i) {
   }
   var buf = doc.getZip().generate({ type: "nodebuffer" });
   fs.writeFileSync(
-    path.join(__dirname, `../output/起诉状/${fileName}.docx`),
+    path.join(__dirname, `../output/${docType}/${fileName}.docx`),
     buf
   );
 }
@@ -71,10 +73,33 @@ async function getQszDocs(params) {
   params.finalDlr2 = params.dlr2[1].value;
   params.yg2 = params.yg2.trim() + "                         ";
   files.forEach((file, i) => {
-    buildWord(params, file, i);
+    buildWord(params, file, i,'起诉状');
   });
   await zipFolder(
     path.join(__dirname, `../output/起诉状`),
+    path.join(__dirname, `../output/result/result.zip`)
+  );
+}
+
+async function getSsclDocs(params) {
+  let files = [
+    "担保函",
+    "调查令申请书",
+    "公告送达申请书（程茜茜签字版）",
+    "强制执行阶段授权委托书",
+    "强制执行申请书",
+    "所函",
+    "网络查扣申请书"
+  ];
+  let data = {
+    ...params.beigao,
+    ...params.yuangao
+  };
+  files.forEach((file, i) => {
+    buildWord(data, file, i,'诉讼材料');
+  });
+  await zipFolder(
+    path.join(__dirname, `../output/诉讼材料`),
     path.join(__dirname, `../output/result/result.zip`)
   );
 }
@@ -93,5 +118,6 @@ function zipFolder(inputFolder, outPutZip) {
 }
 
 module.exports = {
-  getQszDocs
+  getQszDocs,
+  getSsclDocs
 };
