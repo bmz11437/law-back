@@ -5,8 +5,11 @@ const Docxtemplater = require("docxtemplater");
 const compressing = require("compressing");
 
 function buildWord(params, fileName, i, docType) {
-  let type = "";
+  let type = "";let hz='';
   if (docType=='起诉状') {
+    if(i>=1&&i<5){
+      hz='-'+params.bgName;
+    }
     if (i == 1) {
       if (params.hjd == "" && params.wzfbf == 0) {
         type += "1";
@@ -55,7 +58,7 @@ function buildWord(params, fileName, i, docType) {
   }
   var buf = doc.getZip().generate({ type: "nodebuffer" });
   fs.writeFileSync(
-    path.join(__dirname, `../output/${docType}/${fileName}.docx`),
+    path.join(__dirname, `../output/${docType}/${fileName}${hz}.docx`),
     buf
   );
 }
