@@ -5,10 +5,11 @@ const Docxtemplater = require("docxtemplater");
 const compressing = require("compressing");
 
 function buildWord(params, fileName, i, docType) {
-  let type = "";let hz='';
-  if (docType=='起诉状') {
-    if(i>=1&&i<5){
-      hz='-'+params.bgName;
+  let type = "";
+  let hz = "";
+  if (docType == "起诉状") {
+    if (i >= 1 && i < 5) {
+      hz = "-" + params.bgName;
     }
     if (i == 1) {
       if (params.hjd == "" && params.wzfbf == 0) {
@@ -71,16 +72,17 @@ function delDir(path){
       files.forEach((file, index) => {
           let curPath = path + "/" + file;
           if(fs.statSync(curPath).isDirectory()){
-              delDir(curPath); //递归删除文件夹
+              // delDir(curPath); //递归删除文件夹
           } else {
               fs.unlinkSync(curPath); //删除文件
           }
       });
-      fs.rmdirSync(path);
   }
 }
 
+
 async function getQszDocs(params) {
+  await delDir(path.join(__dirname, `../output/起诉状/`));
   let files = [
     "1、法定代表人证明书",
     "2、民事起诉状",
@@ -93,16 +95,16 @@ async function getQszDocs(params) {
   params.finalDlr2 = params.dlr2[1].value;
   params.yg2 = params.yg2.trim() + "                         ";
   files.forEach((file, i) => {
-    buildWord(params, file, i,'起诉状');
+    buildWord(params, file, i, "起诉状");
   });
   await zipFolder(
     path.join(__dirname, `../output/起诉状`),
     path.join(__dirname, `../output/result/result.zip`)
   );
-  delDir(path.join(__dirname, `../output/起诉状`));
 }
 
 async function getSsclDocs(params) {
+  await delDir(path.join(__dirname, `../output/诉讼材料`));
   let files = [
     "担保函",
     "调查令申请书",
@@ -117,13 +119,12 @@ async function getSsclDocs(params) {
     ...params.yuangao
   };
   files.forEach((file, i) => {
-    buildWord(data, file, i,'诉讼材料');
+    buildWord(data, file, i, "诉讼材料");
   });
   await zipFolder(
     path.join(__dirname, `../output/诉讼材料`),
     path.join(__dirname, `../output/result/result.zip`)
   );
-  delDir(path.join(__dirname, `../output/诉讼材料`));
 }
 
 function zipFolder(inputFolder, outPutZip) {
