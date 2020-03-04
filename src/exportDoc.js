@@ -72,7 +72,7 @@ function delDir(path){
       files.forEach((file, index) => {
           let curPath = path + "/" + file;
           if(fs.statSync(curPath).isDirectory()){
-              // delDir(curPath); //递归删除文件夹
+              delDir(curPath); //递归删除文件夹
           } else {
               fs.unlinkSync(curPath); //删除文件
           }
