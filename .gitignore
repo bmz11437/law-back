@@ -1,1 +1,7 @@
 node_modules
+
+output/起诉状/*.docx
+
+output/诉讼材料/*.docx
+
+output/result/*.zip
