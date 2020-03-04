@@ -57,10 +57,27 @@ function buildWord(params, fileName, i, docType) {
     throw error;
   }
   var buf = doc.getZip().generate({ type: "nodebuffer" });
+  console.log(hz);
   fs.writeFileSync(
     path.join(__dirname, `../output/${docType}/${fileName}${hz}.docx`),
     buf
   );
+}
+
+function delDir(path){
+  let files = [];
+  if(fs.existsSync(path)){
+      files = fs.readdirSync(path);
+      files.forEach((file, index) => {
+          let curPath = path + "/" + file;
+          if(fs.statSync(curPath).isDirectory()){
+              delDir(curPath); //递归删除文件夹
+          } else {
+              fs.unlinkSync(curPath); //删除文件
+          }
+      });
+      fs.rmdirSync(path);
+  }
 }
 
 async function getQszDocs(params) {
@@ -82,6 +99,7 @@ async function getQszDocs(params) {
     path.join(__dirname, `../output/起诉状`),
     path.join(__dirname, `../output/result/result.zip`)
   );
+  delDir(path.join(__dirname, `../output/起诉状`));
 }
 
 async function getSsclDocs(params) {
@@ -105,6 +123,7 @@ async function getSsclDocs(params) {
     path.join(__dirname, `../output/诉讼材料`),
     path.join(__dirname, `../output/result/result.zip`)
   );
+  delDir(path.join(__dirname, `../output/诉讼材料`));
 }
 
 function zipFolder(inputFolder, outPutZip) {
