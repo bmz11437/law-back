@@ -12,6 +12,9 @@ function buildWord(params, fileName, i, docType) {
       hz = "-" + params.bgName;
     }
     if (i == 1) {
+      if (!params.wzfbf || !parseInt(params.wzfbf)) {
+        params.wzfbf = 0;
+      }
       if (params.hjd == "" && params.wzfbf == 0) {
         type += "1";
       } else if (params.hjd == "" && params.wzfbf !== 0) {
@@ -58,28 +61,26 @@ function buildWord(params, fileName, i, docType) {
     throw error;
   }
   var buf = doc.getZip().generate({ type: "nodebuffer" });
-  console.log(hz);
   fs.writeFileSync(
     path.join(__dirname, `../output/${docType}/${fileName}${hz}.docx`),
     buf
   );
 }
 
-function delDir(path){
+function delDir(path) {
   let files = [];
-  if(fs.existsSync(path)){
-      files = fs.readdirSync(path);
-      files.forEach((file, index) => {
-          let curPath = path + "/" + file;
-          if(fs.statSync(curPath).isDirectory()){
-              delDir(curPath); //递归删除文件夹
-          } else {
-              fs.unlinkSync(curPath); //删除文件
-          }
-      });
+  if (fs.existsSync(path)) {
+    files = fs.readdirSync(path);
+    files.forEach((file, index) => {
+      let curPath = path + "/" + file;
+      if (fs.statSync(curPath).isDirectory()) {
+        delDir(curPath); //递归删除文件夹
+      } else {
+        fs.unlinkSync(curPath); //删除文件
+      }
+    });
   }
 }
-
 
 async function getQszDocs(params) {
   await delDir(path.join(__dirname, `../output/起诉状/`));
