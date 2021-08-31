@@ -21,7 +21,7 @@
     "koa-static": "^5.0.0",
     "koa2-cors": "^2.0.6",
     "open-docxtemplater-image-module": "^1.0.3",
-    "tar": "^6.0.1"
+    "tar": "^6.1.9"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
